@@ -87,14 +87,24 @@ public class DepartmentFormController implements Initializable {
 
 	private Department getFormData() {
 		Department obj = new Department();
+		String departmentName = "";
 		
 		ValidationException exception = new ValidationException("Validation errors");
 		
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
 		
-		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
-			exception.addErrors("name", "Field can't be empty");
+		departmentName = txtName.getText().trim();
+		
+		if(!departmentName.matches("^[a-zA-Z0-9]*$")) {
+			exception.addErrors("name", "Only alphanumeric, please!");
 		}
+		if (departmentName == null || departmentName.equals("")) {
+			exception.addErrors("name", "Field can't be empty!");
+		}
+		if (departmentName.length() < 3) {
+			exception.addErrors("name", "Must have at least 3 letters!");
+		}
+
 		obj.setName(txtName.getText());
 		
 		if (exception.getErrors().size() > 0) {
